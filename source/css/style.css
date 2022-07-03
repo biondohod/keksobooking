@@ -583,6 +583,16 @@ fieldset {
   border-radius: 5px;
 }
 
+.ad-form__error-text,
+.ad-form__error-text--pristine {
+  color: red;
+  margin-top: 3px;
+}
+
+.has-danger input,
+.has-danger input:hover{
+  border: 2px solid red;
+}
 .ad-form__element--submit {
   -ms-flex-preferred-size: 100%;
       flex-basis: 100%;
@@ -621,6 +631,17 @@ fieldset {
   color: white;
   border-color: #ff6d51;
   background-color: #ff6d51;
+}
+
+.ad-form__submit:disabled {
+  opacity: 0.6;
+}
+
+.ad-form__submit:disabled:hover,
+.ad-form__submit:disabled:active  {
+  border-color: #ffaa99;
+  background-color: white;
+  color: inherit;
 }
 
 .ad-form__reset {
@@ -1028,3 +1049,4 @@ fieldset {
 .hidden {
   display: none;
 }
+
