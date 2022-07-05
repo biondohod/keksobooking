@@ -1,18 +1,21 @@
-import { sendData } from './api.js';
+import { sendData} from './api.js';
 import { resetMap } from './map.js';
 import { resetSlider } from './slider.js';
 const adForm = document.querySelector('.ad-form');
 const adFormElements = adForm.childNodes;
-// const adFormTitle = adForm.querySelector('#title');
 const adFormAddress = adForm.querySelector('#address');
 const adFormType = adForm.querySelector('#type');
 const adFormPrice = adForm.querySelector('#price');
 const adFormReset = adForm.querySelector('.ad-form__reset');
+const adFormTimein = adForm.querySelector('#timein');
+const adFormTimeout = adForm.querySelector('#timeout');
+const adFormRooms = adForm.querySelector('#room_number');
+const adFormGuests = adForm.querySelector('#capacity');
 const mapFilters = document.querySelector('.map__filters');
 const mapFiltersElements = mapFilters.childNodes;
 const successMessage = document.querySelector('#success').content.querySelector('.success');
 const errorMessage = document.querySelector('#error').content.querySelector('.error');
-// const buttonSubmit = adForm.querySelector('.ad-form__submit');
+
 const disableForms = () => {
   adForm.classList.add('ad-form--disabled');
   adFormElements.forEach((element) => {
@@ -24,7 +27,7 @@ const disableForms = () => {
   });
 };
 disableForms();
-// const regExp = /^[0-9]+$/;
+
 const unDisableForms = () => {
   adForm.classList.remove('ad-form--disabled');
   adFormElements.forEach((element) => {
@@ -40,7 +43,6 @@ const setAddress = ({lat, lng}) => {
   adFormAddress.value = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
 };
 
-// eslint-disable-next-line no-unused-vars
 const MIN_PRICE_SETTINGS = {
   bungalow: 0,
   flat: 1000,
@@ -54,18 +56,6 @@ const pristine = new Pristine(adForm, {
   errorTextParent: 'ad-form__element',
   errorTextClass: 'ad-form__error-text--pristine'
 });
-
-// const disableForms = () => {
-//   adForm.classList.add('ad-form--disabled');
-//   adFormElements.forEach((element) => {
-//     element.disabled = true;
-//   });
-//   mapFilters.classList.add('map__filters--disabled');
-//   mapFiltersElements.forEach((element) => {
-//     element.disabled= true;
-//   });
-// };
-// disableForms();
 
 
 pristine.addValidator(adFormPrice, (value) => {
@@ -83,32 +73,6 @@ adFormPrice.addEventListener('input', () => {
 const adFormMinPrice = (input) => {
   const minPrice = eval(`MIN_PRICE_SETTINGS.${input.value}`);
   adFormPrice.placeholder = minPrice;
-  // const checkMinPrice = () => {
-  //   if (adFormPrice.value < minPrice) {
-  //     const errorText = document.createElement('div');
-  //     errorText.classList.add('ad-form__error-text');
-  //     errorText.textContent = `Минимальная цена - ${minPrice}`;
-  //     adFormPrice.insertAdjacentElement('afterend', errorText);
-  //     return false;
-  //   }
-  //   return true;
-  // };
-  // adFormPrice.removeEventListener('input', checkMinPrice);
-  // adFormPrice.addEventListener('input', checkMinPrice);
-  // adFormPrice.min = minPrice;
-  // adFormPrice.dataset.pristineMinMessage = `Минимальная цена - ${minPrice}`;
-  // adFormPrice.addEventListener('input', () => {
-  //   pristine.validate(adFormPrice);
-  // });
-  // const checkMinPrice = () => {
-  //   pristine.addValidator(adFormPrice, (value) => {
-  //     if (value < minPrice) {
-  //       return false;
-  //     }
-  //     return true;
-  //   }, `Минимальная цена - ${minPrice}`);
-  // };
-  // adFormPrice.addEventListener('input', checkMinPrice);
 };
 
 adFormMinPrice(adFormType);
@@ -117,6 +81,38 @@ adFormType.addEventListener('change', (evt) => {
   adFormMinPrice(evt.target);
 });
 
+adFormTimein.addEventListener('change', (evt)=> {
+  adFormTimeout.value = evt.target.value;
+});
+
+adFormTimeout.addEventListener('change', (evt)=> {
+  adFormTimein.value = evt.target.value;
+});
+
+const setRoomsGuests = () => {
+  if (parseInt(adFormRooms.value, 10) !== 100) {
+    for (let i = 0; i < adFormGuests.length; i++) {
+      if (adFormGuests[i].value > adFormRooms.value) {
+        adFormGuests[i].style = 'display: none';
+      } else if (adFormGuests[i].value === adFormRooms.value ){
+        adFormGuests[i].selected = true;
+        adFormGuests[i].style = '';
+      }
+      else {
+        adFormGuests[i].style = '';
+      }
+    }
+    adFormGuests.querySelector('[value="0"]').style = 'display: none';
+  } else {
+    for (let i = 0; i < adFormGuests.length; i++) {
+      adFormGuests[i].style = 'display: none';
+    }
+    adFormGuests.querySelector('[value="0"]').style = 'display: none';
+    adFormGuests.querySelector('[value="0"]').selected = true;
+  }
+};
+setRoomsGuests();
+adFormRooms.addEventListener('change', setRoomsGuests);
 
 const closeSuccessMessage = () =>{
   successMessage.remove();
@@ -160,6 +156,7 @@ const showErrorMessage = () => {
 adFormReset.addEventListener('click', () => {
   resetMap();
   resetSlider();
+  mapFilters.reset();
 });
 
 adForm.addEventListener('submit', (evt) => {

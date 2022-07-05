@@ -1,8 +1,10 @@
+let data = null;
 const getData = (onSuccsess, onFail) => {
   fetch('https://22.javascript.pages.academy/keksobooking/data')
     .then((response) => response.json())
-    .then((offerData) => {
-      onSuccsess(offerData);
+    .then((offersData) => {
+      data = offersData;
+      onSuccsess(offersData);
     })
     .catch(() => {
       onFail('Не удалось загрузить данные с сервера. Попробуйте обновить страницу или проверьте соединение с интернетом');
@@ -28,5 +30,4 @@ const sendData = (onSuccsess, onFail, body) => {
       onFail();
     });
 };
-
-export {getData, sendData};
+export {getData, sendData, data};

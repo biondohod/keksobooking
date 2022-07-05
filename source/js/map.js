@@ -67,4 +67,7 @@ const resetMap = () => {
   setAddress(mainPinMarker.getLatLng());
 };
 
-export {renderOfferPinMarker, resetMap};
+const clearPinMarkers = () => {
+  markerGroup.clearLayers();
+};
+export {renderOfferPinMarker, resetMap, clearPinMarkers};

@@ -627,6 +627,13 @@ fieldset {
   text-align: center;
 }
 
+.popup__photo:active {
+  position: absolute;
+  top: 0;
+  width: 400px;
+  height: auto;
+}
+
 .ad-form__submit {
   font-size: 22px;
   font-weight: 700;

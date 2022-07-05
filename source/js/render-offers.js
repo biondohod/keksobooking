@@ -1,7 +1,9 @@
-import { renderOfferPinMarker } from './map.js';
+import { renderOfferPinMarker, clearPinMarkers } from './map.js';
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
-
+const MAX_PIN_MARKERS = 10;
 const renderOffers = (offersData) => {
+  clearPinMarkers();
+  let counter = 0;
   offersData.forEach((offerData) => {
     const newCard = cardTemplate.cloneNode(true);
 
@@ -88,11 +90,12 @@ const renderOffers = (offersData) => {
     } else {
       newCardAvatar.classList.add('hidden');
     }
-    renderOfferPinMarker(offerData, newCard);
+    if (counter < MAX_PIN_MARKERS) {
+      renderOfferPinMarker(offerData, newCard);
+    }
+    counter++;
   });
+  counter = 0;
 };
-
-// console.log(data);
-// renderOffers(data);
 
 export {renderOffers};
